@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="../logs/cafe/trace/log_trace.log"
+                     filePattern="logs/rolling/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="100 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <File name="InfoLog" fileName="../logs/cafe/log_info.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.5} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="ErrorLog" fileName="../logs/cafe/log_error.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.5} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{2} %M - %msg%n"/>
+        </Console>
+        <Routing name="Routing">
+            <Routes>
+                <Script name="RoutingInit" language="JavaScript"><![CDATA[
+                    logEvent.getLevel();]]>
+                </Script>
+                <Route ref="RollingFile" key="TRACE" />
+                <Route ref="RollingFile" key="DEBUG" />
+                <Route ref="InfoLog" key="INFO" />
+                <Route ref="InfoLog" key="WARN" />
+                <Route ref="ErrorLog" key="ERROR" />
+                <Route ref="ErrorLog" key="FATAL" />
+            </Routes>
+        </Routing>
+    </Appenders>
+
+
+
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="Routing"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
