@@ -41,7 +41,12 @@ public class CancelOrderCommand implements Command {
             return refreshForward(currentPage);
         }
 
-        User user = userLogic.findUserById(order.getUserId());
+        User user;
+        if ("customer".equals(request.getSession().getAttribute("role"))) {
+            user = (User) request.getSession().getAttribute("user");
+        } else {
+            user = userLogic.findUserById(order.getUserId());
+        }
 
         orderLogic.cancelOrder(user, order);
 

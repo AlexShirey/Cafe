@@ -27,12 +27,14 @@ public class ConnectionPool {
     private static ReentrantLock poolLock = new ReentrantLock(true);
     private static ConnectionPool instance;
     private final int POOL_SIZE;
+    private final int CONNECTION_TIMEOUT;
     private Condition isFree = poolLock.newCondition();
     private ArrayDeque<ProxyConnection> connectionPool;
     private AtomicInteger connectionsCreatedCount;
 
     private ConnectionPool() {
         POOL_SIZE = initPoolSize();
+        CONNECTION_TIMEOUT = initTimeout();
         connectionPool = new ArrayDeque<>();
         connectionsCreatedCount = new AtomicInteger(0);
     }
@@ -63,7 +65,7 @@ public class ConnectionPool {
                     LOGGER.log(Level.TRACE, "connection was acquired from connection pool.");
                     return new ProxyConnection(connection);
                 }
-                isFree.await(30, TimeUnit.SECONDS);
+                isFree.await(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
                 if (connectionPool.isEmpty()) {
                     throw new ConnectionException("connection timeout exceeded... connection isn't available now, try later.");
                 }
@@ -138,6 +140,21 @@ public class ConnectionPool {
         if (value <= 0) {
             LOGGER.log(Level.ERROR, "pool size can't be less or equals zero, check database resources.configuration file.");
             throw new RuntimeException("pool size can't be less or equals zero, check database resources.configuration file.");
+        }
+        return value;
+    }
+
+    private int initTimeout() {
+        int value;
+        try {
+            value = Integer.parseInt(DatabaseManager.getProperty("db.connectionTimeout"));
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.ERROR, "connection timeout isn't a number, check database resources.configuration file.", e);
+            throw new RuntimeException("connection timeout isn't a number, check database resources.configuration file.", e);
+        }
+        if (value <= 0) {
+            LOGGER.log(Level.ERROR, "timeout can't be less or equals zero, check database resources.configuration file.");
+            throw new RuntimeException("timeout can't be less or equals zero, check database resources.configuration file.");
         }
         return value;
     }

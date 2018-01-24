@@ -96,9 +96,9 @@
     <c:if test="${role == 'admin'}">
         <%--<br>--%>
         <%--<ul>--%>
-            <li class="li-null-padding"><a href="/controller?command=show_users">users</a></li>
-            <li class="li-null-padding"><a href="/controller?command=show_dishes">dishes</a></li>
-            <li class="li-null-padding"><a href="/controller?command=show_orders">orders</a></li>
+            <li class="li-null-padding"><a href="${root}/controller?command=show_users">users</a></li>
+            <li class="li-null-padding"><a href="${root}/controller?command=show_dishes">dishes</a></li>
+            <li class="li-null-padding"><a href="${root}/controller?command=show_orders">orders</a></li>
 
 
         <%--</ul>--%>

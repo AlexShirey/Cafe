@@ -52,6 +52,7 @@ public class OrderAutoCancelDaemon extends Thread {
     }
 
     public static long getAdditionalTimeBeforeCancel() {
+
         if (additionalTimeBeforeCancel == 0) {
             additionalTimeBeforeCancel = TimeUnit.MINUTES.toMillis(Long.parseLong(ApplicationManager.getProperty("app.additionalTimeInMinutesBeforeAutoCancel")));
         }

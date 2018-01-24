@@ -66,9 +66,9 @@ public class ConfirmOrderCommand implements Command {
 
         Date pickUpTime;
         try {
-            pickUpTime = LocalDateTimeParser.parse(stringPickUpTime);
+            pickUpTime = LocalDateTimeParser.parseLdtStringToDate(stringPickUpTime);
         } catch (ParseException e) {
-            throw new LogicException("can't parse input string - localeDateTime to Date", e);
+            throw new LogicException("can't parseLdtStringToDate input string - localeDateTime to Date", e);
         }
 
         router.setPage(PageManager.getProperty(PAGE_CONFIRMED_ORDER));

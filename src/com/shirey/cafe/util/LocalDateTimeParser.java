@@ -13,9 +13,9 @@ public class LocalDateTimeParser {
     }
 
 
-    public static Date parse(String ltdDate) throws ParseException {
+    public static Date parseLdtStringToDate(String localeDateTime) throws ParseException {
 
-        return simpleDateFormat.parse(ltdDate);
+        return simpleDateFormat.parse(localeDateTime);
 
     }
 
