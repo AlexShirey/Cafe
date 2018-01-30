@@ -51,7 +51,7 @@ public enum CommandType {
     //Admin
     SHOW_USERS(new ShowUsersCommand(new AdminLogic())),
     SHOW_DISHES(new ShowDishesCommand(new AdminLogic())),
-    SHOW_ORDERS(new ShowOrdersCommand(new AdminLogic(), new OrderLogic())),
+    SHOW_ORDERS(new ShowOrdersCommand(new AdminLogic(), new UserLogic(), new OrderLogic())),
     SHOW_EDIT_USER_FORM(new ShowEditUserFormCommand(new UserLogic(), new AdminLogic())),
     SHOW_EDIT_DISH_FORM(new ShowEditDishFormCommand(new DishLogic())),
     EDIT_USER(new EditUserCommand(new AdminLogic())),
@@ -66,7 +66,7 @@ public enum CommandType {
     //Order
     CANCEL_ORDER(new CancelOrderCommand(new OrderLogic(), new UserLogic())),
     FINISH_ORDER(new FinishOrderCommand(new OrderLogic())),
-    SHOW_REVIEWS(new ShowReviewsCommand(new OrderLogic(), new CustomerLogic()));
+    SHOW_REVIEWS(new ShowReviewsCommand(new OrderLogic(), new UserLogic()));
 
     private Command command;
 

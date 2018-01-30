@@ -13,12 +13,29 @@ public class UserInfoCustomTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         User user = (User) pageContext.getSession().getAttribute("user");
+        String locale = (String) pageContext.getSession().getAttribute("locale");
+        String loggedFirst;
+        String loggedSecond;
+        String notLoggedIn;
+
         String info;
 
+        switch (locale) {
+            case ("ru_RU"):
+                loggedFirst = "Вы авторизированы как ";
+                loggedSecond = ", Ваше имя ";
+                notLoggedIn = "Вы не авторизированы, гость. Пожалуйста, войдите.";
+                break;
+            default:
+                loggedFirst = "You logged in as ";
+                loggedSecond = ", your name is ";
+                notLoggedIn = "You are not logged in, guest. Please, log in.";
+        }
+
         if (user != null) {
-            info = "You logged in as " + user.getRole().name().toLowerCase() + ", your name is " + user.getFirstName();
+            info = loggedFirst + user.getRole().name().toLowerCase() + loggedSecond + user.getFirstName();
         } else {
-            info = "You are not logged in, guest. Please, log in";
+            info = notLoggedIn;
         }
 
         JspWriter out = pageContext.getOut();

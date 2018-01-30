@@ -1,6 +1,5 @@
 package com.shirey.cafe.logic;
 
-import com.shirey.cafe.dao.DishDAO;
 import com.shirey.cafe.dao.UserDAO;
 import com.shirey.cafe.entity.Dish;
 import com.shirey.cafe.entity.PaymentType;
@@ -9,8 +8,6 @@ import com.shirey.cafe.exception.DAOException;
 import com.shirey.cafe.exception.LogicException;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,7 +46,7 @@ public class CustomerLogic {
     //ok+
     public BigDecimal definePointsAmount(BigDecimal price, PaymentType paymentType) {
 
-        return price.multiply(new BigDecimal(paymentType.getLoyaltyPointPercent())).divide(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return price.multiply(new BigDecimal(paymentType.getLoyaltyPointPercent())).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP);
     }
 
     //ok+
@@ -82,16 +79,6 @@ public class CustomerLogic {
         }
 
         return cartPrice;
-    }
-
-    //ok+
-    public List<User> findCustomersWithReview() throws LogicException {
-
-        try {
-            return userDAO.findUsersWithReview();
-        } catch (DAOException e) {
-            throw new LogicException(e);
-        }
     }
 
 }

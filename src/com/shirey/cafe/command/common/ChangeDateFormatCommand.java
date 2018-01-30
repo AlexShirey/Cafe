@@ -16,7 +16,9 @@ public class ChangeDateFormatCommand implements Command {
     public Router execute(HttpServletRequest request) throws LogicException {
 
         String dateFormatStyle = request.getParameter(PARAM_DATE_FORMAT_STYLE);
-        request.getSession().setAttribute("dateFormatStyle", dateFormatStyle);
+        if (dateFormatStyle != null) {
+            request.getSession().setAttribute("dateFormatStyle", dateFormatStyle);
+        }
 
         return refreshForward(PageManager.getProperty(PAGE_PROFILE));
 

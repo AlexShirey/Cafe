@@ -32,6 +32,9 @@ public class UserDAO extends AbstractDAO<Integer, User> {
     private static final String SQL_SELECT_USERS_WITH_REVIEW =
             "SELECT user_id, email, password, first_name, last_name, phone, user.create_date, balance, loyalty_points, active, role_id  FROM user JOIN `order` USING(user_id) WHERE review IS NOT NULL GROUP BY user_id";
 
+    private static final String SQL_SELECT_USERS_WITH_ORDER =
+            "SELECT user_id, email, password, first_name, last_name, phone, user.create_date, balance, loyalty_points, active, role_id  FROM user JOIN `order` USING(user_id) GROUP BY user_id";
+
     private static final String SQL_SELECT_USER_BY_LOGIN =
             "SELECT user_id, email, password, first_name, last_name, phone, create_date, balance, loyalty_points, active, role_id  FROM user WHERE email=?;";
 
@@ -156,6 +159,26 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
         return users;
     }
+
+
+    public List<User> findUsersWithOrders() throws DAOException {
+
+        List<User> users = new ArrayList<>();
+        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(SQL_SELECT_USERS_WITH_ORDER);
+            while (resultSet.next()) {
+                User user = buildUser(resultSet);
+                users.add(user);
+            }
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new DAOException("SQL exception (query or table failed)", e);
+        }
+        return users;
+    }
+
 
     //ok+
     public boolean isExist(String login) throws DAOException {

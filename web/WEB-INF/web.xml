@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
@@ -16,16 +15,12 @@
         </taglib>
     </jsp-config>
 
-
     <session-config>
         <session-timeout>10</session-timeout>
-        <!--<cookie-config>-->
-        <!--<max-age>10</max-age>-->
-        <!--</cookie-config>-->
     </session-config>
 
     <error-page>
-        <exception-type>java.lang.RuntimeException</exception-type>
+        <exception-type>java.lang.Throwable</exception-type>
         <location>/jsp/error/uncheckedError.jsp</location>
     </error-page>
 
@@ -33,51 +28,5 @@
         <error-code>404</error-code>
         <location>/jsp/error/checkedError.jsp</location>
     </error-page>
-
-
-    <!--<error-page>-->
-    <!--<error-code>404</error-code>-->
-    <!--<location>/jsp/error/uncheckedError.jsp</location>-->
-    <!--</error-page>-->
-
-
-    <!--<error-page>-->
-    <!--<exception-type>java.lang.RuntimeException</exception-type>-->
-    <!--<location>/jsp/error/error_page.jsp</location>-->
-    <!--</error-page>-->
-
-    <!--<error-page>-->
-    <!--<exception-type>java.util.MissingResourceException</exception-type>-->
-    <!--<location>/jsp/error/error_page.jsp</location>-->
-    <!--</error-page>-->
-
-
-    <!--<error-page>-->
-    <!--<exception-type>java.util.MissingResourceException</exception-type>-->
-    <!--<location>/jsp/error/unchecked_error_page.jsp</location>-->
-    <!--</error-page>-->
-
-
-    <!--<error-page>-->
-    <!--<exception-type>javax.servlet.ServletException</exception-type>-->
-    <!--<location>/jsp/error/error_page.jsp</location>-->
-    <!--</error-page>-->
-
-    <!--<error-page>-->
-    <!--<error-code>500</error-code>-->
-    <!--<location>/jsp/error/error_page.jsp</location>-->
-    <!--</error-page>-->
-
-    <!--<error-page>-->
-    <!--<exception-type>java.lang.ExceptionInInitializerError</exception-type>-->
-    <!--<location>/jsp/error/init_error_page.jsp</location>-->
-    <!--</error-page>-->
-
-
-    <!--<error-page>-->
-    <!--<exception-type>java.lang.Throwable</exception-type>-->
-    <!--<location>/jsp/error/error_page.jsp</location>-->
-    <!--</error-page>-->
-
 
 </web-app>

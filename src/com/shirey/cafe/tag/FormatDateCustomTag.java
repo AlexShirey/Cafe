@@ -12,7 +12,8 @@ import java.util.Locale;
 public class FormatDateCustomTag extends TagSupport {
 
     private Date date;
-    public void setDate(Date date){
+
+    public void setDate(Date date) {
         this.date = date;
     }
 

@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -182,13 +181,13 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
     @Override
     public List<Order> findAll() throws DAOException {
 
-        List<Order> orders = new ArrayList<>();
+        LinkedList<Order> orders = new LinkedList<>();
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SQL_SELECT_All_ORDERS);
             while (resultSet.next()) {
                 Order order = buildOrder(resultSet);
-                orders.add(order);
+                orders.addFirst(order);
             }
         } catch (ConnectionException e) {
             throw new DAOException(e);

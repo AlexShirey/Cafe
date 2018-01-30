@@ -11,7 +11,7 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {"/jsp/admin/*", "/jsp/service/*"})
 public class AdminPackageSecurityFilter implements Filter {
 
-    private static final String PAGE_LOGIN = "page.login";
+    private static final String PAGE_INDEX = "page.index";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -24,7 +24,7 @@ public class AdminPackageSecurityFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String role = (String) httpServletRequest.getSession().getAttribute("role");
         if (!"admin".equals(role)) {
-            RequestDispatcher dispatcher = httpServletRequest.getServletContext().getRequestDispatcher(PageManager.getProperty(PAGE_LOGIN));
+            RequestDispatcher dispatcher = httpServletRequest.getServletContext().getRequestDispatcher(PageManager.getProperty(PAGE_INDEX));
             dispatcher.forward(httpServletRequest, httpServletResponse);
         }
         chain.doFilter(request, response);

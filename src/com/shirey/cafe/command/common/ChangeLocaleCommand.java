@@ -15,10 +15,11 @@ public class ChangeLocaleCommand implements Command {
     public Router execute(HttpServletRequest request) throws LogicException {
 
         String locale = request.getParameter(PARAM_LOCALE);
-        request.getSession().setAttribute(ATTR_LOCALE, locale);
+        if (locale != null) {
+            request.getSession().setAttribute(ATTR_LOCALE, locale);
+        }
 
         return refreshForward((String) request.getSession().getAttribute("currentPage"));
 
     }
-
 }

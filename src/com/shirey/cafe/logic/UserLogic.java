@@ -66,5 +66,25 @@ public class UserLogic {
         }
     }
 
+    //ok+
+    public List<User> findUsersWithReview() throws LogicException {
+
+        try {
+            return userDAO.findUsersWithReview();
+        } catch (DAOException e) {
+            throw new LogicException(e);
+        }
+    }
+
+    //ok+
+    public List<User> findUsersWithOrders() throws LogicException {
+
+        try {
+            return userDAO.findUsersWithOrders();
+        } catch (DAOException e) {
+            throw new LogicException(e);
+        }
+    }
+
 
 }

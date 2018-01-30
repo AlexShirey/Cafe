@@ -1,166 +1,228 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <%@ taglib prefix="ctg" uri="customtags" %>
 
-<html>
+<c:import url="/jsp/service/head.jsp"/>
 <head>
-    <title>Profile</title>
+    <title><fmt:message key="title.profile"/></title>
 </head>
 <body>
-
-<c:set var="currentPage" value="/jsp/user/profile.jsp" scope="session"/>
 <c:import url="/jsp/service/header.jsp"/>
+<c:set var="currentPage" value="/jsp/user/profile.jsp" scope="session"/>
 
-<br>
-<fieldset>
-    <legend>Personal information:</legend>
-    Email: ${user.email} <br>
-    First name: ${user.firstName} <br>
-    Last name: ${user.lastName} <br>
-    Phone: ${user.phone} <br> <br>
-    <button onclick="showChangeProfile()">change profile info</button>
-    <br><br>
-    You are blocked: ${!user.active} <br>
-    Registration date&time: <ctg:formatDate date="${user.createDate}"/>
-</fieldset>
 
-<fieldset id="changeProfileForm" style="display: none">
-    <legend>Change personal information:</legend>
-    <form method="post" action="${root}/controller">
-        <input type="hidden" name="command" value="change_user_password">
-        <input type="password" name="password" id="password" required placeholder="new password"
-               autocomplete="off" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}"><br>
-        <small>6+ chars (at least one number, one upper and lower case letter, max 30 chars)</small>
-        <br>
-        <input type="password" id="confirm_password" placeholder="confirm password" autocomplete="off"><br>
-        <input type="submit" value="change password">
-    </form>
-    <form autocomplete="on" method="post" action="${root}/controller">
-        <input type="hidden" name="command" value="change_user_names">
-        <input type="text" name="first_name" required placeholder="${user.firstName}"
-               pattern="[A-Z]{1}[a-z]{1,19}|[А-ЯЁ]{1}[а-яё]{1,19}">
-        <br>
-        <small>2+ chars (letters only, first letter is Capital, max 20 chars (RU or EN))</small>
-        <br>
-        <input type="text" name="last_name" required placeholder="${user.lastName}"
-               pattern="[A-Z]{1}[a-z]{1,19}|[А-ЯЁ]{1}[а-яё]{1,19}">
-        <br>
-        <small>2+ chars (letters only, first letter is Capital, max 20 chars (RU or EN))</small>
-        <br>
-        <input type="submit" value="change names">
-    </form>
-    <form autocomplete="on" method="post" action="${root}/controller">
-        <input type="hidden" name="command" value="change_user_phone">
-        <input type="text" name="phone" required placeholder="${user.phone}"
-               pattern="[+]\d{3}[(]\d{2}[)]\d{3}[-]\d{2}[-]\d{2}">
-        <br>
-        <small>BY format +375(29)612-61-09</small>
-        <br>
-        <input type="submit" value="change phone">
-    </form>
-</fieldset>
+<div class="container text-center" style="margin-top: 240px">
 
-<c:if test="${messageInvalidInputData}">
-    <br>
-    <fmt:message key="message.invalidInputData" bundle="${rbMsg}"/>
-    <br>
-</c:if>
-<c:if test="${messageProfileChanged}">
-    <br>
-    <fmt:message key="message.profileChanged" bundle="${rbMsg}"/>
-    <c:remove var="messageProfileChanged"/>
-    <br>
-</c:if>
-
-<br>
-<c:if test="${role == 'customer'}">
     <fieldset>
-        <legend>Account information:</legend>
-        Balance: ${user.account.balance} BYN<br>
-        <form name="addMoney" method="POST" action="${root}/controller">
-            <input type="hidden" name="command" value="add_money"/>
-            <input type="number" placeholder="100" min="5" max="500" name="moneyAmount" required/>
-            <c:choose>
-                <c:when test="${user.isActive()}">
-                    <input type="submit" value="add money"/>
-                </c:when>
-                <c:otherwise>
-                    <input type="submit" disabled value="add money">
-                </c:otherwise>
-            </c:choose>
-        </form>
-        <c:if test="${messageInvalidMoneyAmount}">
-            <fmt:message key="message.invalidMoneyAmount" bundle="${rbMsg}"/><br><br>
-        </c:if>
-        <c:if test="${messageMoneyAdded}">
-            <c:out value="${moneyAmount}"/>
-            <fmt:message key="message.moneyAdded" bundle="${rbMsg}"/><br><br>
-            <c:remove var="messageMoneyAdded"/>
-            <c:remove var="moneyAmount"/>
-        </c:if>
-        Loyalty Points: ${user.account.loyaltyPoints} <br>
+        <legend><fmt:message key="profile.personalInfo"/></legend>
+        <fmt:message key="profile.email"/>: ${user.email} <br>
+        <fmt:message key="profile.first"/>: ${user.firstName} <br>
+        <fmt:message key="profile.last"/>: ${user.lastName} <br>
+        <fmt:message key="profile.phone"/>: ${user.phone} <br>
+        <br>
+        <fmt:message key="profile.blocked"/>: ${!user.active} <br>
+        <fmt:message key="profile.registration"/>: <ctg:formatDate date="${user.createDate}"/><br><br>
+        <button class="btn btn-outline-warning my-2 my-sm-0" onclick="showChangeProfile()"><fmt:message
+                key="profile.btn.changeProfile"/></button>
     </fieldset>
-</c:if>
+    <div class="row justify-content-center">
+        <div class="col-3">
+            <fieldset id="changeProfileForm" style="display: none"><br>
+                <form method="post" action="${root}/controller">
+                    <input type="hidden" name="command" value="change_user_password">
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control" id="password" required
+                               placeholder="<fmt:message key="profile.newPass.placeholder"/>"
+                               autocomplete="off" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,30}">
+                        <small class="form-text text-muted"><fmt:message key="registration.password.small"/>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="confirm_password" class="form-control"
+                               placeholder="<fmt:message key="profile.confirmPass.placeholder"/>"
+                               autocomplete="off" required>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit"><fmt:message
+                                key="profile.btn.changePass"/></button>
+                    </div>
+                </form>
+                <form autocomplete="on" method="post" action="${root}/controller">
+                    <input type="hidden" name="command" value="change_user_names">
+                    <div class="form-group">
+                        <input type="text" name="first_name" class="form-control" required
+                               placeholder="${user.firstName}"
+                               pattern="[A-Z]{1}[a-z]{1,19}|[А-ЯЁ]{1}[а-яё]{1,19}">
+                        <small class="form-text text-muted"><fmt:message key="registration.first.small"/>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="last_name" class="form-control" required placeholder="${user.lastName}"
+                               pattern="[A-Z]{1}[a-z]{1,19}|[А-ЯЁ]{1}[а-яё]{1,19}">
+                        <small class="form-text text-muted"><fmt:message key="registration.first.small"/>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit"><fmt:message
+                                key="profile.btn.changeNames"/></button>
+                    </div>
+                </form>
+                <form autocomplete="on" method="post" action="${root}/controller">
+                    <input type="hidden" name="command" value="change_user_phone">
+                    <div class="form-group">
+                        <input type="text" name="phone" class="form-control" required placeholder="${user.phone}"
+                               pattern="[+]\d{3}[(]\d{2}[)]\d{3}[-]\d{2}[-]\d{2}">
+                        <small class="form-text text-muted"><fmt:message key="registration.phone.small"/></small>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit"><fmt:message
+                                key="profile.btn.changePhone"/></button>
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+    <c:if test="${messageInvalidInputData}">
+        <br><span class="text-center">
+            <fmt:message key="message.invalidInputData" bundle="${rbMsg}"/></span>
+        <br>
+    </c:if>
+    <c:if test="${messageProfileChanged}">
+        <br><span class="text-success">
+        <fmt:message key="message.profileChanged" bundle="${rbMsg}"/></span>
+        <c:remove var="messageProfileChanged"/>
+        <br>
+    </c:if>
+    <br>
+    <c:if test="${role == 'customer'}">
+        <fieldset>
+            <legend><fmt:message key="profile.accountInfo"/></legend>
+            <fmt:message key="profile.balance"/>: ${user.account.balance} BYN<br>
+            <fmt:message key="profile.points"/>: ${user.account.loyaltyPoints} <br><br>
+            <form name="addMoney" method="POST" action="${root}/controller">
+                <input type="hidden" name="command" value="add_money"/>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <input type="number" class="form-control" placeholder="100" min="5" max="500" name="moneyAmount"
+                               required/>
+                    </div>
+                    <div class="col-auto">
+                        <c:choose>
+                            <c:when test="${user.isActive()}">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><fmt:message
+                                        key="profile.btn.addMoney"/></button>
+                            </c:when>
+                            <c:otherwise>
+                                <button disabled class="btn btn-outline-success my-2 my-sm-0" type="submit"><fmt:message
+                                        key="profile.btn.addMoney"/>
+                                </button>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+            </form>
+            <c:if test="${messageInvalidMoneyAmount}">
+                <br><span class="text-danger">
+                <fmt:message key="message.invalidMoneyAmount" bundle="${rbMsg}"/></span>
+            </c:if>
+            <c:if test="${messageMoneyAdded}">
+                <br><span class="text-success"><c:out value="${moneyAmount}"/>
+                <fmt:message key="message.moneyAdded" bundle="${rbMsg}"/></span>
+                <c:remove var="messageMoneyAdded"/>
+                <c:remove var="moneyAmount"/>
+            </c:if>
+        </fieldset>
+    </c:if>
+    <br>
+    <hr style="border-color: #1e7e34">
+    <p><fmt:message key="profile.selectDate"/></p>
+    <div class="row justify-content-center">
+        <form name="changeDateFormat" method="get" action="${root}/controller">
+            <input type="hidden" name="command" value="change_date_format"/>
+            <select class="form-control w-100 mb-10" required name="dateFormatStyle">
+                <c:choose>
+                    <c:when test="${dateFormatStyle == 'SHORT'}">
+                        <option disabled selected id="short"
+                                title="short style, e.g 1/24/18 (depends on locale)"
+                                value="SHORT">
+                            <fmt:message key="profile.dateShort"/>
+                        </option>
+                        <option id="medium" title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)"
+                                value="MEDIUM">
+                            <fmt:message key="profile.dateMedium"/>
+                        </option>
+                        <option id="long" title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)"
+                                value="LONG">
+                            <fmt:message key="profile.dateLong"/>
+                        </option>
+                        <option title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO"><fmt:message
+                                key="profile.dateISO"/></option>
+                    </c:when>
+                    <c:when test="${dateFormatStyle == 'MEDIUM'}">
+                        <option id="short" title="short style, e.g 1/24/18 (depends on locale)" value="SHORT">
+                            <fmt:message key="profile.dateShort"/>
+                        </option>
+                        <option disabled selected id="medium"
+                                title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)"
+                                value="MEDIUM">
+                            <fmt:message key="profile.dateMedium"/>
+                        </option>
+                        <option id="long" title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)"
+                                value="LONG">
+                            <fmt:message key="profile.dateLong"/>
+                        </option>
+                        <option title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO"><fmt:message
+                                key="profile.dateISO"/></option>
+                    </c:when>
+                    <c:when test="${dateFormatStyle == 'LONG'}">
+                        <option id="short" title="short style, e.g 1/24/18 (depends on locale)" value="SHORT">
+                            <fmt:message key="profile.dateShort"/>
+                        </option>
+                        <option id="medium" title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)"
+                                value="MEDIUM">
+                            <fmt:message key="profile.dateMedium"/>
+                        </option>
+                        <option disabled selected id="long"
+                                title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)"
+                                value="LONG"><fmt:message key="profile.dateLong"/>
+                        </option>
+                        <option title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO"><fmt:message
+                                key="profile.dateISO"/></option>
+                    </c:when>
+                    <c:otherwise>
+                        <option id="short" title="short style, e.g 1/24/18 (depends on locale)" value="SHORT">
+                            <fmt:message key="profile.dateShort"/>
+                        </option>
+                        <option id="medium" title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)"
+                                value="MEDIUM">
+                            <fmt:message key="profile.dateMedium"/>
+                        </option>
+                        <option id="long" title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)"
+                                value="LONG">
+                            <fmt:message key="profile.dateLong"/>
+                        </option>
+                        <option disabled selected title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO">
+                            <fmt:message key="profile.dateISO"/>
+                        </option>
+                    </c:otherwise>
+                </c:choose>
+            </select>
+            <br>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><fmt:message
+                    key="profile.btn.change"/></button>
+        </form>
+    </div>
+</div>
 
 
-<p> You can select date-time style to be shown: </p>
-<form name="changeDateFormat" method="get" action="${root}/controller">
-    <input type="hidden" name="command" value="change_date_format"/>
-    <select name="dateFormatStyle">
-        <c:choose>
-            <c:when test="${dateFormatStyle == 'SHORT'}">
-                <option disabled selected id="short" title="short style, e.g 1/24/18 (depends on locale)" value="SHORT">
-                    short
-                </option>
-                <option id="medium" title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)" value="MEDIUM">
-                    medium
-                </option>
-                <option id="long" title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)" value="LONG">
-                    long
-                </option>
-                <option title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO">ISO</option>
-            </c:when>
-            <c:when test="${dateFormatStyle == 'MEDIUM'}">
-                <option id="short" title="short style, e.g 1/24/18 (depends on locale)" value="SHORT">short</option>
-                <option disabled selected id="medium"
-                        title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)" value="MEDIUM">medium
-                </option>
-                <option id="long" title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)" value="LONG">
-                    long
-                </option>
-                <option title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO">ISO</option>
-            </c:when>
-            <c:when test="${dateFormatStyle == 'LONG'}">
-                <option id="short" title="short style, e.g 1/24/18 (depends on locale)" value="SHORT">short</option>
-                <option id="medium" title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)" value="MEDIUM">
-                    medium
-                </option>
-                <option disabled selected id="long"
-                        title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)" value="LONG">long
-                </option>
-                <option title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO">ISO</option>
-            </c:when>
-            <c:otherwise>
-                <option id="short" title="short style, e.g 1/24/18 (depends on locale)" value="SHORT">short</option>
-                <option id="medium" title="medium style, e.g Jan 24, 2018 10:41 PM (depends on locale)" value="MEDIUM">
-                    medium
-                </option>
-                <option id="long" title="long type, e.g January 9, 2018 10:41:35 PM (depends on locale)" value="LONG">
-                    long
-                </option>
-                <option disabled selected title="ISO 8601 style, e.g. 2017-12-31 12:48:55" value="ISO">ISO</option>
-            </c:otherwise>
-        </c:choose>
-    </select>
-    <input type="submit" value="change"/>
-</form>
-
+<br>
+<br>
 
 <c:import url="/jsp/service/footer.jsp"/>
+<script type="text/javascript" src="${root}/js/cafe.js"></script>
 </body>
-</html>
+
 
 
 

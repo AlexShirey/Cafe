@@ -39,9 +39,6 @@
             </Routes>
         </Routing>
     </Appenders>
-
-
-
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="Routing"/>

@@ -9,8 +9,8 @@ public class InputDataValidator {
     private static final String NAME_PATTERN = "[A-Z]{1}[a-z]{1,19}|[А-ЯЁ]{1}[а-яё]{1,19}";
     private static final String PHONE_PATTERN = "[+]\\d{3}[(]\\d{2}[)]\\d{3}[-]\\d{2}[-]\\d{2}";
     private static final String NUMBER_PATTERN = "\\d+(\\.\\d+)?";
-    private static final String DISH_NAME_PATTERN = "[A-ZА-ЯЁa-zа-яё\\d ]{2,}";
-    private static final String DISH_DESCRIPTION_PATTERN = "[A-ZА-ЯЁ].{4,}";
+    private static final String DISH_NAME_PATTERN = "[A-ZА-ЯЁa-zа-яё\\d ]{2,50}";
+    private static final String DISH_DESCRIPTION_PATTERN = "[A-ZА-ЯЁ].{5,200}";
 
 
     private InputDataValidator() {
