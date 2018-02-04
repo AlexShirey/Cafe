@@ -21,9 +21,3 @@ function showChangeProfile() {
         x.style.display = "none";
     }
 }
-
-
-
-
-
-

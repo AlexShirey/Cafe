@@ -7,8 +7,7 @@
 <fmt:setBundle basename="resources.pagecontent" scope="session"/>
 <fmt:setBundle basename="resources.configuration.messages" scope="session" var="rbMsg"/>
 
-<c:set var="root" value="${pageContext.request.contextPath}" scope="session"/>
-
+<%--<c:set var="root" value="${pageContext.request.contextPath}" scope="session"/>--%>
 
 <div class="fixed-top"
      style="background-image: url(${root}/img/header.jpeg); max-width: 100%; height: auto; ">

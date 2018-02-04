@@ -3,6 +3,15 @@ package com.shirey.cafe.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * The {@code Dish} class
+ * is an entity that represents table 'dish' in the database.
+ * <p>
+ * Overrides clone(), equals(), hashcode(), toString() methods.
+ *
+ * @author Alex Shirey
+ */
+
 public class Dish extends Entity {
 
     private int dishId;

@@ -14,6 +14,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code UserDAO} class
+ * provides access to the tables 'user', 'user_role' in the database
+ *
+ * @author Alex Shirey
+ */
 
 public class UserDAO extends AbstractDAO<Integer, User> {
 
@@ -59,7 +65,14 @@ public class UserDAO extends AbstractDAO<Integer, User> {
     private static final String SQL_UPDATE_USER =
             "UPDATE user SET loyalty_points=?, active=?, role_id=? WHERE user_id=?;";
 
-    //ok+
+    /**
+     * Inserts in the table a new row that represents {@code User} object,
+     * sets the auto generated id to this {@code User} object
+     *
+     * @param user a {@code User} object
+     * @throws DAOException if a database access error occurs or
+     *                      if now rows where inserted
+     */
     public void create(User user) throws DAOException {
 
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -85,7 +98,14 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
     }
 
-    //ok+
+    /**
+     * Gets a row from the table using user id,
+     * builds and returns {@code User} object that represents this id
+     *
+     * @param id a user id
+     * @return a {@code User}, or null if no user id is founded in the table
+     * @throws DAOException if a database access error occurs
+     */
     @Override
     public User findEntityById(Integer id) throws DAOException {
 
@@ -105,6 +125,13 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         return user;
     }
 
+    /**
+     * Gets all rows from table 'user' and
+     * returns them as a list of {@code User} objects
+     *
+     * @return a list contains {@code User}, not null
+     * @throws DAOException if a database access error occurs
+     */
     @Override
     public List<User> findAll() throws DAOException {
 
@@ -117,14 +144,20 @@ public class UserDAO extends AbstractDAO<Integer, User> {
                 users.add(user);
             }
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            throw new DAOException(e);
         } catch (SQLException e) {
             throw new DAOException("SQL exception (query or table failed)", e);
         }
         return users;
     }
 
-
+    /**
+     * Gets all rows from table 'user_role' and
+     * returns them as a list of {@code String}
+     *
+     * @return a list contains user role values as {@code String}, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<String> findAllUserRoles() throws DAOException {
 
         List<String> userRoles = new ArrayList<>();
@@ -135,13 +168,21 @@ public class UserDAO extends AbstractDAO<Integer, User> {
                 userRoles.add(resultSet.getString(1));
             }
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            throw new DAOException(e);
         } catch (SQLException e) {
             throw new DAOException("SQL exception (query or table failed)", e);
         }
         return userRoles;
     }
 
+    /**
+     * Gets rows from the table 'user' where review is not null (join table 'order'),
+     * rows are grouped by user id (only one row for each user),
+     * returns them as a list of {@code User} objects
+     *
+     * @return a list contains {@code User} with reviews, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<User> findUsersWithReview() throws DAOException {
 
         List<User> users = new ArrayList<>();
@@ -153,14 +194,21 @@ public class UserDAO extends AbstractDAO<Integer, User> {
                 users.add(user);
             }
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            throw new DAOException(e);
         } catch (SQLException e) {
             throw new DAOException("SQL exception (query or table failed)", e);
         }
         return users;
     }
 
-
+    /**
+     * Gets rows from the table 'user' which have at least one row in the table 'order',
+     * rows are grouped by user id (only one row for each user),
+     * returns them as a list of {@code User} objects
+     *
+     * @return a list contains {@code User} with at least one order, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<User> findUsersWithOrders() throws DAOException {
 
         List<User> users = new ArrayList<>();
@@ -172,30 +220,22 @@ public class UserDAO extends AbstractDAO<Integer, User> {
                 users.add(user);
             }
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            throw new DAOException(e);
         } catch (SQLException e) {
             throw new DAOException("SQL exception (query or table failed)", e);
         }
         return users;
     }
 
-
-    //ok+
-    public boolean isExist(String login) throws DAOException {
-
-        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_BY_LOGIN)) {
-            preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
-        } catch (ConnectionException e) {
-            throw new DAOException(e);
-        } catch (SQLException e) {
-            throw new DAOException("SQL exception (query or table failed)", e);
-        }
-    }
-
-    //ok+
+    /**
+     * Gets a row from the table using user login and password,
+     * builds and returns {@code User} object that represents this params
+     *
+     * @param login    a user login
+     * @param password a user password
+     * @return a {@code User}, or null if no row is founded in the table with this params
+     * @throws DAOException if a database access error occurs
+     */
     public User findUserByLoginAndPass(String login, String password) throws DAOException {
 
         User user = null;
@@ -215,7 +255,36 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         return user;
     }
 
-    //ok+
+    /**
+     * Checks if the table 'user' contains a row where 'email' = login
+     *
+     * @param login a user login that should be checked
+     * @return a {@code true} if the table has such row, {@code false} otherwise
+     * @throws DAOException if a database access error occurs
+     */
+    public boolean isExist(String login) throws DAOException {
+
+        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_BY_LOGIN)) {
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (ConnectionException e) {
+            throw new DAOException(e);
+        } catch (SQLException e) {
+            throw new DAOException("SQL exception (query or table failed)", e);
+        }
+    }
+
+    /**
+     * Updates a row in the table using user id
+     * with new balance value
+     *
+     * @param userId  a user id
+     * @param balance a new balance value
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updateBalance(int userId, BigDecimal balance) throws DAOException {
 
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -232,7 +301,15 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
     }
 
-    //ok+
+    /**
+     * Updates a row in the table using user id
+     * with new password value
+     *
+     * @param userId   a user id
+     * @param password a new password value
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updatePassword(int userId, String password) throws DAOException {
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PASSWORD)) {
@@ -248,7 +325,16 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
     }
 
-    //ok+
+    /**
+     * Updates a row in the table using user id
+     * with new firstName and lastName values
+     *
+     * @param userId    a user id
+     * @param firstName a new first name value
+     * @param lastName  a new last name value
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updateNames(int userId, String firstName, String lastName) throws DAOException {
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_NAMES)) {
@@ -265,7 +351,15 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
     }
 
-    //ok+
+    /**
+     * Updates a row in the table using user id
+     * with new phone value
+     *
+     * @param userId a user id
+     * @param phone  a new phone value
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updatePhone(int userId, String phone) throws DAOException {
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PHONE)) {
@@ -281,6 +375,15 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
     }
 
+    /**
+     * Updates a row in the table using user id
+     * with new active status value
+     *
+     * @param userId a user id
+     * @param active a new active status value (true if user is not banned, false otherwise)
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updateActiveStatus(int userId, boolean active) throws DAOException {
 
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -297,6 +400,17 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
     }
 
+    /**
+     * Updates a row in the table using user id
+     * with new values - loyalty points, active status and role id
+     *
+     * @param userId        a user id
+     * @param loyaltyPoints a new loyalty points value
+     * @param active        a new active value (true if user is not banned, false otherwise)
+     * @param roleId        a new user role id value
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updateUser(int userId, BigDecimal loyaltyPoints, boolean active, int roleId) throws DAOException {
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
@@ -314,7 +428,13 @@ public class UserDAO extends AbstractDAO<Integer, User> {
         }
     }
 
-
+    /**
+     * Creates a new {@code User} object and
+     * sets its values using {@code ResultSet}
+     *
+     * @param rs a {@code ResultSet} to build an object
+     * @return a {@code User}
+     */
     private User buildUser(ResultSet rs) throws SQLException {
 
         User user = new User();

@@ -10,6 +10,12 @@ import com.shirey.cafe.util.InputDataValidator;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The {@code AddMoneyCommand} class
+ * is a command to add money to the customer's account balance.
+ *
+ * @author Alex Shirey
+ */
 
 public class AddMoneyCommand implements Command {
 
@@ -21,6 +27,19 @@ public class AddMoneyCommand implements Command {
         this.customerLogic = customerLogic;
     }
 
+    /**
+     * Gets amount of money to be added from the request,
+     * validates this amount, if the value is not a positive number, returns router to the same page with message about invalid money amount.
+     * Otherwise, sums up this amount with current customer balance, updates the database and returns router to the same page with success message.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see InputDataValidator#isPositiveNumber(String)
+     * @see CustomerLogic#addMoney(User, String)
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 

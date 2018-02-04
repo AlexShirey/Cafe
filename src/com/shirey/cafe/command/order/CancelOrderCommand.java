@@ -4,7 +4,6 @@ import com.shirey.cafe.command.Command;
 import com.shirey.cafe.controller.Router;
 import com.shirey.cafe.entity.Order;
 import com.shirey.cafe.entity.User;
-import com.shirey.cafe.entity.UserRole;
 import com.shirey.cafe.exception.LogicException;
 import com.shirey.cafe.logic.OrderLogic;
 import com.shirey.cafe.logic.UserLogic;
@@ -12,6 +11,13 @@ import com.shirey.cafe.manager.PageManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+/**
+ * The {@code CancelOrderCommand} class
+ * is a command to cancel the order.
+ *
+ * @author Alex Shirey
+ */
 
 public class CancelOrderCommand implements Command {
 
@@ -26,6 +32,27 @@ public class CancelOrderCommand implements Command {
         this.userLogic = userLogic;
     }
 
+    /**
+     * Gets the order id from the request.
+     * Checks, if the order status is not active (order can be auto cancelled, or cancelled/finished by admin before the customer),
+     * prevents to cancel it and returns router to the same page with a message.
+     * Cancels the order (subtracts loyalty points, updates database).
+     * Checks, if the user has 3 cancelled orders, bans this user.
+     * Returns router to the same page.
+     * <p>
+     * This command can be called both by admin and customer.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see OrderLogic#isOrderActive(Order)
+     * @see OrderLogic#cancelOrder(User, Order)
+     * @see OrderLogic#getUserCancelledOrdersAmount(int)
+     * @see UserLogic#findUserById(int)
+     * @see UserLogic#banUser(User)
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 
@@ -36,7 +63,7 @@ public class CancelOrderCommand implements Command {
 
         String currentPage = defineCurrentPage(request);
 
-        if (order.getStatus() != Order.Status.ACTIVE) {
+        if (!orderLogic.isOrderActive(order)) {
             request.setAttribute("messageOrderIsAlreadyCancelled", true);
             return refreshForward(currentPage);
         }
@@ -66,8 +93,14 @@ public class CancelOrderCommand implements Command {
         return refreshRedirect(currentPage);
     }
 
-
-    private String defineCurrentPage(HttpServletRequest request) {
+    /**
+     * Defines from what page this command was called (depends on user role),
+     * and returns this page
+     *
+     * @param request a request object
+     * @return a current page
+     */
+    static String defineCurrentPage(HttpServletRequest request) {
 
         String currentPage;
         switch (((User) request.getSession().getAttribute("user")).getRole()) {

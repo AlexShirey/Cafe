@@ -16,6 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The {@code DishDAO} class
+ * provides access to the tables 'dish', 'dish_type' in the database
+ *
+ * @author Alex Shirey
+ */
 
 public class DishDAO extends AbstractDAO<Integer, Dish> {
 
@@ -40,7 +46,14 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
     private static final String SQL_UPDATE_DISH =
             "UPDATE dish SET description=?, dish_price=?, in_menu=? WHERE dish_id=?";
 
-
+    /**
+     * Inserts in the table a new row that represents {@code Dish} object,
+     * sets the auto generated id to this {@code Dish} object
+     *
+     * @param dish a {@code Dish} object
+     * @throws DAOException if a database access error occurs or
+     *                      if now rows where inserted
+     */
     public void create(Dish dish) throws DAOException {
 
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -66,6 +79,14 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
         }
     }
 
+    /**
+     * Gets a row from the table using dish id,
+     * builds and returns {@code Dish} object that represents this id
+     *
+     * @param id a dish id
+     * @return a {@code Dish}, or null if no dish id is founded in the table
+     * @throws DAOException if a database access error occurs
+     */
     @Override
     public Dish findEntityById(Integer id) throws DAOException {
 
@@ -85,7 +106,13 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
         return dish;
     }
 
-
+    /**
+     * Gets all rows from table 'dish' and
+     * returns them as a list of {@code Dish} objects
+     *
+     * @return a list contains {@code Dish}, not null
+     * @throws DAOException if a database access error occurs
+     */
     @Override
     public List<Dish> findAll() throws DAOException {
 
@@ -105,6 +132,13 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
         return dishes;
     }
 
+    /**
+     * Gets all rows from table 'dish_type' and
+     * returns them as a list of {@code String}
+     *
+     * @return a list contains dish types values as {@code String}, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<String> findAllDishTypes() throws DAOException {
 
         List<String> dishTypes = new ArrayList<>();
@@ -115,14 +149,20 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
                 dishTypes.add(resultSet.getString(1));
             }
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            throw new DAOException(e);
         } catch (SQLException e) {
             throw new DAOException("SQL exception (query or table failed)", e);
         }
         return dishTypes;
     }
 
-
+    /**
+     * Gets rows from the table 'dish' where inMenu is {@code true},
+     * returns them as a list of {@code Dish} objects
+     *
+     * @return a list contains {@code Dish}, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<Dish> findDishesInMenu() throws DAOException {
 
         List<Dish> menu = new ArrayList<>();
@@ -141,7 +181,15 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
         return menu;
     }
 
-
+    /**
+     * Returns a Map that has a {@code Dish} dishes as key and {@code Integer} dish quantity as value.
+     * Map is built from the rows in three tables 'order', 'order_has_dish' and 'dish' using dish_id.
+     * Map contains dishes only for one order.
+     *
+     * @param orderId a order id
+     * @return a map contains {@code Dish} presented in the order and their quantity, not null
+     * @throws DAOException if a database access error occurs
+     */
     public Map<Dish, Integer> findDishesInOrder(int orderId) throws DAOException {
 
         Map<Dish, Integer> dishes = new HashMap<>();
@@ -161,7 +209,17 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
         return dishes;
     }
 
-
+    /**
+     * Updates a row in the table using dish id
+     * with new values - description, price and inMenu status
+     *
+     * @param dishId      - a dish id
+     * @param description - a new description value
+     * @param price       - a new price value
+     * @param inMenu      - a new inMenu value (in  menu - true, otherwise - false)
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updateDish(int dishId, String description, BigDecimal price, boolean inMenu) throws DAOException {
 
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -180,7 +238,13 @@ public class DishDAO extends AbstractDAO<Integer, Dish> {
         }
     }
 
-
+    /**
+     * Creates a new {@code Dish} object and
+     * sets its values using {@code ResultSet}
+     *
+     * @param rs a {@code ResultSet} to build an object
+     * @return a {@code Dish}
+     */
     private Dish buildDish(ResultSet rs) throws SQLException {
 
         Dish dish = new Dish();

@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The {@code OrderDAO} class
+ * provides access to the table 'order' in the database
+ *
+ * @author Alex Shirey
+ */
 
 public class OrderDAO extends AbstractDAO<Integer, Order> {
 
@@ -62,6 +68,19 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
             "UPDATE `order` SET is_paid=?, status=? WHERE order_id=?";
 
 
+    /**
+     * Updates the table 'user' with new balance and loyaltyPoints values,
+     * inserts in the table 'order' a new row that represents {@code Order} object,
+     * sets the auto generated id to this {@code Order} object,
+     * inserts in the table 'order_has_dish' a new row that represents {@code Map} user cart.
+     *
+     * @param balance       a user balance value to update
+     * @param loyaltyPoints a user loyalty points value to update
+     * @param order         a {@code Order} object to insert into the table 'order'
+     * @param cart          a map which values are used to insert into the table 'order_has_dish'
+     * @throws DAOException if a database access error occurs or
+     *                      if now rows where updated
+     */
     public void create(BigDecimal balance, BigDecimal loyaltyPoints, Order order, Map<Dish, Integer> cart) throws DAOException {
 
         ProxyConnection connection;
@@ -121,7 +140,16 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         }
     }
 
-
+    /**
+     * Updates the table 'user' with new loyaltyPoints value,
+     * updates the table 'order' with new order status value.
+     *
+     * @param loyaltyPoints a user loyalty points value to update
+     * @param order         a {@code Order} object to get order id and user id values
+     * @param status        a order status value to update
+     * @throws DAOException if a database access error occurs or
+     *                      if now rows where updated
+     */
     public void cancelOrder(BigDecimal loyaltyPoints, Order order, Order.Status status) throws DAOException {
 
         ProxyConnection connection;
@@ -145,7 +173,6 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
             if (updateUser.executeUpdate() == 0 || updateOrder.executeUpdate() == 0) {
                 throw new DAOException("Cancelling order failed (updating user and order tables), no rows affected.");
             }
-
             connection.commit();
         } catch (SQLException e) {
             try {
@@ -159,6 +186,14 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         }
     }
 
+    /**
+     * Gets a row from the table using order id,
+     * builds and returns {@code Order} object that represents this id
+     *
+     * @param id a order id
+     * @return a {@code Order}, or null if no order id is founded in the table
+     * @throws DAOException if a database access error occurs
+     */
     @Override
     public Order findEntityById(Integer id) throws DAOException {
 
@@ -178,6 +213,13 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         return order;
     }
 
+    /**
+     * Gets all rows from the table 'order' and
+     * returns them as a list of {@code Order} objects in reverse order
+     *
+     * @return a list contains {@code Order}, not null
+     * @throws DAOException if a database access error occurs
+     */
     @Override
     public List<Order> findAll() throws DAOException {
 
@@ -197,7 +239,14 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         return orders;
     }
 
-
+    /**
+     * Gets all rows from the table 'order' for one user (using user id),
+     * returns them as a list of {@code Order} objects in reverse order
+     *
+     * @param userId a user id
+     * @return a list contains {@code Order}, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<Order> findOrdersByUserId(int userId) throws DAOException {
 
         LinkedList<Order> orders = new LinkedList<>();
@@ -217,6 +266,14 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         return orders;
     }
 
+    /**
+     * Gets all rows from the table 'order' for one user (using user id) where order status is ACTIVE,
+     * returns them as a list of {@code Order} objects in reverse order
+     *
+     * @param userId a user id
+     * @return a list contains {@code Order}, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<Order> findActiveOrdersByUserId(int userId) throws DAOException {
 
         LinkedList<Order> orders = new LinkedList<>();
@@ -236,6 +293,14 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         return orders;
     }
 
+    /**
+     * Gets all rows from the table 'order' for one user (using user id) where order status is CANCELLED,
+     * returns them as a list of {@code Order} objects in reverse order
+     *
+     * @param userId a user id
+     * @return a list contains {@code Order}, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<Order> findCancelledOrdersByUserId(int userId) throws DAOException {
 
         LinkedList<Order> orders = new LinkedList<>();
@@ -255,6 +320,13 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         return orders;
     }
 
+    /**
+     * Gets all rows from the table 'order' where review is not null,
+     * returns them as a list of {@code Order} objects in reverse order
+     *
+     * @return a list contains {@code Order} with reviews, not null
+     * @throws DAOException if a database access error occurs
+     */
     public List<Order> findOrdersWithReview() throws DAOException {
 
         LinkedList<Order> orders = new LinkedList<>();
@@ -273,7 +345,16 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         return orders;
     }
 
-
+    /**
+     * Updates a row in the table using order id
+     * with new rating and review values
+     *
+     * @param orderId a order id
+     * @param rating  a new rating value
+     * @param review  a new review value
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
     public void updateOrderReview(int orderId, Integer rating, String review) throws DAOException {
 
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -295,14 +376,23 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         }
     }
 
-
-    public void updateOrder(Order order, boolean isPaid, Order.Status status) throws DAOException {
+    /**
+     * Updates a row in the table using order id
+     * with new isPaid and status values
+     *
+     * @param orderId a order id
+     * @param isPaid  a new isPaid value
+     * @param status  a new status value
+     * @throws DAOException if {@code DaoException} occurs (database access error) or
+     *                      if now rows where updated
+     */
+    public void updateOrder(int orderId, boolean isPaid, Order.Status status) throws DAOException {
 
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement updateOrder = connection.prepareStatement(SQL_UPDATE_ORDER_IS_PAID_AND_STATUS)) {
             updateOrder.setBoolean(1, isPaid);
             updateOrder.setString(2, status.name());
-            updateOrder.setInt(3, order.getOrderId());
+            updateOrder.setInt(3, orderId);
             if (updateOrder.executeUpdate() == 0) {
                 throw new DAOException("Updating order failed (updating user and order tables), no rows affected.");
             }
@@ -313,7 +403,13 @@ public class OrderDAO extends AbstractDAO<Integer, Order> {
         }
     }
 
-
+    /**
+     * Creates a new {@code Order} object and
+     * sets its values using {@code ResultSet}
+     *
+     * @param rs a {@code ResultSet} to build an object
+     * @return a {@code Order}
+     */
     private Order buildOrder(ResultSet rs) throws SQLException {
 
         Order order = new Order();

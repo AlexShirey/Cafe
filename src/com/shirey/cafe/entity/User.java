@@ -3,6 +3,15 @@ package com.shirey.cafe.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * The {@code User} class
+ * is an entity that represents table 'user' in the database.
+ * <p>
+ * Overrides clone(), equals(), hashcode(), toString() methods.
+ *
+ * @author Alex Shirey
+ */
+
 public class User extends Entity {
 
     private int userId;
@@ -30,6 +39,13 @@ public class User extends Entity {
         account = new Account();
     }
 
+    /**
+     * Separates the financial fields such as balance and loyalty points
+     * from other user's fields.
+     * Unites the financial fields to the inner {@code Account} class.
+     * <p>
+     * Overrides equals(), hashcode(), toString() methods.
+     */
     public class Account extends Entity {
 
         private BigDecimal balance;

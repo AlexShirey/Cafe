@@ -1,6 +1,5 @@
 package com.shirey.cafe.filter;
 
-
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -10,6 +9,15 @@ import javax.servlet.FilterChain;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
+
+/**
+ * The {@code EncodingFilter} class
+ * is an implementation of {@code Filter} interface.
+ * <p>
+ * Sets character encoding UTF-8 to each request and response objects.
+ *
+ * @author Alex Shirey
+ */
 
 @WebFilter(urlPatterns = "/*",
         initParams = {@WebInitParam(name = "encoding", value = "UTF-8")})

@@ -7,6 +7,17 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
+/**
+ * The {@code UserInfoCustomTag} class
+ * is a custom tag that shows user info - user name, role.
+ * If a user is not logged in, the tag shows this information.
+ * Supports two languages, en and ru (locale is taken from user session).
+ * <p>
+ * Output is a {@code String}
+ *
+ * @author Alex Shirey
+ */
+
 public class UserInfoCustomTag extends TagSupport {
 
     @Override

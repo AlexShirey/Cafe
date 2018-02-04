@@ -3,6 +3,15 @@ package com.shirey.cafe.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * The {@code Order} class
+ * is an entity that represents table 'order' in the database.
+ * <p>
+ * Overrides clone(), equals(), hashcode(), toString() methods.
+ *
+ * @author Alex Shirey
+ */
+
 public class Order extends Entity {
 
     private int orderId;

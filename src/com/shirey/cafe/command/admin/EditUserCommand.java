@@ -10,6 +10,14 @@ import com.shirey.cafe.manager.PageManager;
 import com.shirey.cafe.util.InputDataValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+
+/**
+ * The {@code EditUserCommand} class
+ * is a command to edit a selected user.
+ *
+ * @author Alex Shirey
+ */
 
 public class EditUserCommand implements Command {
 
@@ -23,6 +31,23 @@ public class EditUserCommand implements Command {
         this.adminLogic = adminLogic;
     }
 
+    /**
+     * Gets loyalty points, active status and user role values from the request.
+     * Validates points to be a positive number, if value is not valid,
+     * returns router to the same page with message about invalid quantity.
+     * Otherwise, edits user and returns router to the same page with success message.
+     * <p>
+     * Not allows to change user role from 'customer' to 'admin' if this customer has active orders.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see InputDataValidator#isPositiveNumberOrZero(String)
+     * @see AdminLogic#hasCustomerActiveOrders(User)
+     * @see AdminLogic#editUser(User, BigDecimal, boolean, UserRole)
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 
@@ -38,13 +63,13 @@ public class EditUserCommand implements Command {
         }
 
         if (userToEdit.getRole() != UserRole.ADMIN && "admin".equals(role)) {
-            if (adminLogic.HasCustomerActiveOrders(userToEdit)) {
+            if (adminLogic.hasCustomerActiveOrders(userToEdit)) {
                 request.setAttribute("messageCantChangeRoleToAdmin", true);
                 return refreshForward(PageManager.getProperty(PAGE_EDIT_USER));
             }
         }
 
-        adminLogic.editUser(userToEdit, points, active, role);
+        adminLogic.editUser(userToEdit, new BigDecimal(points), Boolean.valueOf(active), UserRole.valueOf(role.toUpperCase()));
 
         request.getSession().setAttribute("messageUpdatedSuccessfully", true);
 

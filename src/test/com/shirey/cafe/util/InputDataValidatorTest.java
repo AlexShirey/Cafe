@@ -72,10 +72,8 @@ public class InputDataValidatorTest {
         return new Object[][]{
                 {"Миша", true},
                 {"Max", true},
-                {"Иванов", true},
                 {"Smith", true},
                 {"миша", false},
-                {"мИша", false},
                 {"МишА", false},
                 {"Мишаsmith", false},
                 {"Мишаааааааааааааааааааааааааааа", false},

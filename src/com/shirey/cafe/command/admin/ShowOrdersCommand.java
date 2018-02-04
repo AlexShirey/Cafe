@@ -13,6 +13,12 @@ import com.shirey.cafe.manager.PageManager;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * The {@code ShowOrdersCommand} class
+ * is a command to show orders page.
+ *
+ * @author Alex Shirey
+ */
 
 public class ShowOrdersCommand implements Command {
 
@@ -22,13 +28,29 @@ public class ShowOrdersCommand implements Command {
     private UserLogic userLogic;
     private OrderLogic orderLogic;
 
-
     public ShowOrdersCommand(AdminLogic adminLogic, UserLogic userLogic, OrderLogic orderLogic) {
         this.adminLogic = adminLogic;
         this.userLogic = userLogic;
         this.orderLogic = orderLogic;
     }
 
+    /**
+     * Shows orders only for a selected user or all orders.
+     * If request parameter "userIdToShowOrders" is not null,
+     * gets only user orders from the database.
+     * Otherwise, gets all orders.
+     * Sets the session attribute to show orders and
+     * returns router to the orders page.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see OrderLogic#findUserOrders(int)
+     * @see UserLogic#findUserById(int)
+     * @see AdminLogic#findAllOrders()
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 

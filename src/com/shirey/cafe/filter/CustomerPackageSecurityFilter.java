@@ -8,6 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The {@code CustomerPackageSecurityFilter} class
+ * is an implementation of {@code Filter} interface,
+ * <p>
+ * Filters the jsp customer package -
+ * forwards request and response to the index page if a user role is not customer
+ *
+ * @author Alex Shirey
+ */
+
 @WebFilter(urlPatterns = "/jsp/customer/*")
 public class CustomerPackageSecurityFilter implements Filter {
 

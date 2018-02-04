@@ -10,6 +10,13 @@ import com.shirey.cafe.util.InputDataValidator;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The {@code ChangeUserPhoneCommand} class
+ * is a command to change current user phone.
+ *
+ * @author Alex Shirey
+ */
+
 public class ChangeUserPhoneCommand implements Command {
 
     private static final String PAGE_PROFILE = "page.profile";
@@ -20,6 +27,19 @@ public class ChangeUserPhoneCommand implements Command {
         this.userLogic = userLogic;
     }
 
+    /**
+     * Gets user phone which he wants to change from the request.
+     * Validates input value, if input data is not valid, returns router to the same page with message about invalid input data.
+     * Otherwise, edits user value (updates database) and returns router to the same page with success message.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see InputDataValidator#validatePhone(String)
+     * @see UserLogic#changePhone(User, String)
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 

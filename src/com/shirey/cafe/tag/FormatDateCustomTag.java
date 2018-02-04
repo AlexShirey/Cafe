@@ -9,8 +9,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * The {@code FormatDateCustomTag} class
+ * is a custom tag for representation {@code Date}
+ * to a String value. A representation depends on a chosen type and locale.
+ * <p>
+ * The output will be one of next formats:
+ * <ul>
+ * <li>short type: 1/24/18 (depends on locale)</li>
+ * <li>medium type: Jan 24, 2018 10:41 PM (depends on locale)</li>
+ * <li>long type: January 9, 2018 10:41:35 PM (depends on locale)</li>
+ * <li>ISO 8601 type (default, if a type doesn't match previous one): 2017-12-31 12:48:55</li>
+ * </ul>
+ * <p>
+ *
+ * @author Alex Shirey
+ */
+
 public class FormatDateCustomTag extends TagSupport {
 
+    /**
+     * A {@code Date} that should be passed to the tag,  required attribute.
+     */
     private Date date;
 
     public void setDate(Date date) {

@@ -9,6 +9,14 @@ import com.shirey.cafe.manager.PageManager;
 import com.shirey.cafe.util.InputDataValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+
+/**
+ * The {@code EditDishCommand} class
+ * is a command to edit a selected dish.
+ *
+ * @author Alex Shirey
+ */
 
 public class EditDishCommand implements Command {
 
@@ -22,6 +30,19 @@ public class EditDishCommand implements Command {
         this.adminLogic = adminLogic;
     }
 
+    /**
+     * * Gets dish description, price, inMenu values from the request.
+     * Validates input values, if input data is not valid, returns router to the same page with message about invalid input data.
+     * Otherwise, edits dish and returns router to the same page with success message.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see InputDataValidator#validateEditDishForm(String, String)
+     * @see AdminLogic#editDish(Dish, String, BigDecimal, boolean)
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 
@@ -36,7 +57,7 @@ public class EditDishCommand implements Command {
             return refreshForward(PageManager.getProperty(PAGE_EDIT_DISH));
         }
 
-        adminLogic.editDish(dishToEdit, description, price, inMenu);
+        adminLogic.editDish(dishToEdit, description, new BigDecimal(price), Boolean.valueOf(inMenu));
 
         request.getSession().setAttribute("messageUpdatedSuccessfully", true);
 

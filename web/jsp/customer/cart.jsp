@@ -68,7 +68,7 @@
                 </table>
                 <br>
                 <form name="placeOrderForm" method="get" action="${root}/controller">
-                    <input type="hidden" name="command" value="place_order"/>
+                    <input type="hidden" name="command" value="show_place_order_page"/>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><fmt:message key="cart.placeOrder"/></button>
                 </form>
             </div>

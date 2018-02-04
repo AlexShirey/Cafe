@@ -3,8 +3,6 @@ package com.shirey.cafe.manager;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
-
 public class DatabaseManagerTest {
 
     @Test

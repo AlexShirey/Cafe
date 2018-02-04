@@ -10,6 +10,13 @@ import com.shirey.cafe.manager.PageManager;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * The {@code ShowOrderDetailsCommand} class
+ * is a command to show order details (what dishes are in the order) page.
+ *
+ * @author Alex Shirey
+ */
+
 public class ShowOrderDetailsCommand implements Command {
 
     private static final String PAGE_ORDER_DETAILS = "page.orderDetails";
@@ -21,6 +28,19 @@ public class ShowOrderDetailsCommand implements Command {
         this.dishLogic = dishLogic;
     }
 
+    /**
+     * Gets order id and order price from the request,
+     * finds dishes that are in this order,
+     * sets them as session attribute and
+     * returns router to the order details page.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see DishLogic#findDishesInOrder(int)
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 

@@ -20,16 +20,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The {@code Controller} class
+ * is a main HttpServlet for current Web project.
+ * Overrides doPost and doGet methods by calling
+ * the own method processRequest(request, response).
+ *
+ * @author Alex Shirey
+ */
 
 @WebServlet(name = "controller", urlPatterns = {"/controller"})
 public class Controller extends HttpServlet {
 
     private static final Logger LOGGER = LogManager.getLogger(Controller.class);
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -39,6 +49,25 @@ public class Controller extends HttpServlet {
         ConnectionPool.getInstance().closeConnections();
     }
 
+    /**
+     * This method is called by doGet and doPost methods.
+     * Gets the command from the request, and calls method execute(request) on it that has
+     * own implementation for each command.
+     * Sets the type how request and response should be processed after this controller or
+     * redirect a response to the error page if UnsupportedCommandException or LogicException occurs.
+     *
+     * @param request  an {@link HttpServletRequest} object that
+     *                 contains the request the client has made
+     *                 of the servlet
+     * @param response an {@link HttpServletResponse} object that
+     *                 contains the response the servlet sends
+     *                 to the client
+     * @throws IOException      if an input or output error is
+     *                          detected when the servlet handles
+     *                          the request
+     * @throws ServletException if the request
+     *                          could not be handled
+     */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Router router;
@@ -47,7 +76,7 @@ public class Controller extends HttpServlet {
             router = command.execute(request);
         } catch (UnsupportedCommandException | LogicException e) {
             router = new Router();
-            router.setPage(PageManager.getProperty("page.checkedError"));
+            router.setPage(PageManager.getProperty("page.error"));
             router.setRoute(Router.RouteType.REDIRECT);
             request.getSession().setAttribute("error", e);
             LOGGER.log(Level.ERROR, e.getMessage(), e);

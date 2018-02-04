@@ -5,7 +5,6 @@ import com.shirey.cafe.controller.Router;
 import com.shirey.cafe.entity.Order;
 import com.shirey.cafe.entity.User;
 import com.shirey.cafe.exception.LogicException;
-import com.shirey.cafe.logic.CustomerLogic;
 import com.shirey.cafe.logic.OrderLogic;
 import com.shirey.cafe.logic.UserLogic;
 import com.shirey.cafe.manager.PageManager;
@@ -13,6 +12,12 @@ import com.shirey.cafe.manager.PageManager;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * The {@code ShowReviewsCommand} class
+ * is a command to show reviews page.
+ *
+ * @author Alex Shirey
+ */
 
 public class ShowReviewsCommand implements Command {
 
@@ -25,6 +30,19 @@ public class ShowReviewsCommand implements Command {
         this.userLogic = userLogic;
     }
 
+    /**
+     * Gets orders and customers with reviews from the database and
+     * sets this values as session attributes, then
+     * returns router to the reviews page.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see OrderLogic#findOrdersWithReview()
+     * @see UserLogic#findUsersWithReview()
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 

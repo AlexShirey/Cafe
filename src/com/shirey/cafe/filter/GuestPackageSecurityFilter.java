@@ -8,6 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The {@code GuestPackageSecurityFilter} class
+ * is an implementation of {@code Filter} interface,
+ * <p>
+ * Filters the jsp guest package -
+ * forwards request and response to the profile page if a user is logged in.
+ *
+ * @author Alex Shirey
+ */
+
 @WebFilter(urlPatterns = "/jsp/guest/*")
 public class GuestPackageSecurityFilter implements Filter {
 

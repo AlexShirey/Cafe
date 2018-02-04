@@ -11,6 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The {@code ShowMenuCommand} class
+ * is a command to show menu page.
+ *
+ * @author Alex Shirey
+ */
+
 public class ShowMenuCommand implements Command {
 
     private static final String PAGE_MENU = "page.menu";
@@ -20,6 +27,18 @@ public class ShowMenuCommand implements Command {
         this.dishLogic = dishLogic;
     }
 
+    /**
+     * Gets dishes presented in the menu from database as list,
+     * sorts this list by dish type, sets it as session attribute and
+     * returns router to the menu page.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see DishLogic#findDishesInMenu()
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 

@@ -1,11 +1,19 @@
 package com.shirey.cafe.db;
 
-import com.shirey.cafe.exception.DAOException;
-
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
+
+/**
+ * The {@code ProxyConnection} class
+ * is an implementation of Connection interface
+ * that overrides method close() and has own method closeConnection().
+ * All other interface methods have no changes.
+ *
+ * @author Alex Shirey
+ * @see Connection
+ */
 
 public class ProxyConnection implements Connection {
 
@@ -15,11 +23,21 @@ public class ProxyConnection implements Connection {
         this.connection = connection;
     }
 
+
+    /**
+     * Releases this connection to the connection poll
+     * instead of closing it.
+     */
     @Override
     public void close() throws SQLException {
         ConnectionPool.getInstance().releaseConnection(this);
     }
 
+    /**
+     * Closes this connection.
+     *
+     * @throws SQLException SQLException if a database access error occurs
+     */
     void closeConnection() throws SQLException {
         connection.close();
     }

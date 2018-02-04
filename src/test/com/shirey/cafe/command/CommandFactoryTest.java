@@ -5,7 +5,6 @@ import com.shirey.cafe.exception.UnsupportedCommandException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
 
 public class CommandFactoryTest {
 

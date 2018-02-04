@@ -20,6 +20,13 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * The {@code ConfirmOrderCommand} class
+ * is a command to place new order.
+ *
+ * @author Alex Shirey
+ */
+
 public class ConfirmOrderCommand implements Command {
 
     private static final String PAGE_CART = "page.cart";
@@ -36,6 +43,30 @@ public class ConfirmOrderCommand implements Command {
         this.dishLogic = dishLogic;
     }
 
+    /**
+     * Gets payment type and pick up time values from request,
+     * checks, if the cart is empty (if customer removed dishes in a new browser tab),
+     * returns router to the shopping cart page.
+     * <p>
+     * Then checks, if the menu was changed during customer was placing this order
+     * (admin can change dishes that customer has chosen), returns router to the cart page with message.
+     * <p>
+     * Then checks, if the customer's balance and loyalty points amount is less then order price,
+     * returns router with message about it.
+     * <p>
+     * Places new order (updates database) and clears the shopping cart,
+     * returns router to the confirmed order page with success message and
+     * message that order will be auto cancelled if it is not picked up at time.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @see DishLogic#isMenuChanged(Map)
+     * @see CustomerLogic#checkBalance(User, BigDecimal)
+     * @see CustomerLogic#checkLoyaltyPoints(User, BigDecimal)
+     * @see OrderLogic#makeOrder(User, PaymentType, Date, BigDecimal, Map)
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 
@@ -47,13 +78,18 @@ public class ConfirmOrderCommand implements Command {
         User user = (User) request.getSession().getAttribute("user");
 
         Router router = new Router();
+        router.setPage(PageManager.getProperty(PAGE_CART));
+
+        if (cart.isEmpty()) {
+            return router;
+        }
+
         router.setRoute(Router.RouteType.REDIRECT);
 
         if (dishLogic.isMenuChanged(cart)) {
             cartPrice = customerLogic.defineCartPrice(cart);
             request.getSession().setAttribute("cartPrice", cartPrice);
             request.getSession().setAttribute("messageMenuChanged", true);
-            router.setPage(PageManager.getProperty(PAGE_CART));
             return router;
         }
 

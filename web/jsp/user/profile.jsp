@@ -22,7 +22,9 @@
         <fmt:message key="profile.phone"/>: ${user.phone} <br>
         <br>
         <fmt:message key="profile.blocked"/>: ${!user.active} <br>
-        <fmt:message key="profile.registration"/>: <ctg:formatDate date="${user.createDate}"/><br><br>
+        <c:if test="${user != null}">
+            <fmt:message key="profile.registration"/>: <ctg:formatDate date="${user.createDate}"/><br><br>
+        </c:if>
         <button class="btn btn-outline-warning my-2 my-sm-0" onclick="showChangeProfile()"><fmt:message
                 key="profile.btn.changeProfile"/></button>
     </fieldset>

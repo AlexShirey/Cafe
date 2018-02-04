@@ -11,6 +11,13 @@ import com.shirey.cafe.manager.PageManager;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * The {@code ShowEditUserFormCommand} class
+ * is a command to show edit user page.
+ *
+ * @author Alex Shirey
+ */
+
 public class ShowEditUserFormCommand implements Command {
 
     private static final String PAGE_EDIT_USER = "page.editUser";
@@ -23,6 +30,20 @@ public class ShowEditUserFormCommand implements Command {
         this.adminLogic = adminLogic;
     }
 
+    /**
+     * Gets user to edit id parameter from the request,
+     * finds the user with this id and
+     * sets this user as session attribute,
+     * returns router to the edit user page.
+     *
+     * @param request an {@link HttpServletRequest} object that
+     *                contains the request the client has made
+     *                of the servlet
+     * @return a {@code Router} object
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     * @see UserLogic#findUserById(int)
+     * @see AdminLogic#findAllUserRoles()
+     */
     @Override
     public Router execute(HttpServletRequest request) throws LogicException {
 

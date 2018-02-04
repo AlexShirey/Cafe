@@ -10,13 +10,25 @@ import com.shirey.cafe.exception.LogicException;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * The {@code AdminLogic} class
+ * contains methods to provide admin logic
+ *
+ * @author Alex Shirey
+ */
+
 public class AdminLogic {
 
     private UserDAO userDAO = new UserDAO();
     private DishDAO dishDAO = new DishDAO();
     private OrderDAO orderDAO = new OrderDAO();
 
-    //ok+
+    /**
+     * Gets all users from a database.
+     *
+     * @return a list contains {@code User}, not null
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
     public List<User> findAllUsers() throws LogicException {
 
         try {
@@ -26,7 +38,12 @@ public class AdminLogic {
         }
     }
 
-    //ok+
+    /**
+     * Gets all dishes from a database.
+     *
+     * @return a list contains {@code Dish}, not null
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
     public List<Dish> findAllDishes() throws LogicException {
 
         try {
@@ -36,7 +53,12 @@ public class AdminLogic {
         }
     }
 
-    //ok+
+    /**
+     * Gets all orders from a database in reverse order.
+     *
+     * @return a list contains {@code Order}, not null
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
     public List<Order> findAllOrders() throws LogicException {
 
         try {
@@ -46,7 +68,12 @@ public class AdminLogic {
         }
     }
 
-    //ok
+    /**
+     * Gets all user roles from a database.
+     *
+     * @return a list contains user role values as {@code String}, not null
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
     public List<String> findAllUserRoles() throws LogicException {
 
         try {
@@ -56,7 +83,12 @@ public class AdminLogic {
         }
     }
 
-    //ok
+    /**
+     * Gets all dish types from a database.
+     *
+     * @return a list contains dish type values as {@code String}, not null
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
     public List<String> findAllDishTypes() throws LogicException {
         try {
             return dishDAO.findAllDishTypes();
@@ -65,13 +97,21 @@ public class AdminLogic {
         }
     }
 
+    /**
+     * Edits {@code User} object -
+     * updates database values - loyalty points, active status and role id (role status)
+     * for user that should be edited.
+     * After the update, updated values are set to this {@code User} object
+     *
+     * @param userToEdit    a {@code User} that should be edited
+     * @param loyaltyPoints a new loyalty points value
+     * @param active        a new active value (true if user is not banned, false otherwise)
+     * @param role          a new user role value
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
+    public void editUser(User userToEdit, BigDecimal loyaltyPoints, boolean active, UserRole role) throws LogicException {
 
-    //ok+
-    public void editUser(User userToEdit, String points, String activeValue, String role) throws LogicException {
-
-        BigDecimal loyaltyPoints = new BigDecimal(points);
-        boolean active = Boolean.valueOf(activeValue);
-        int roleId = UserRole.valueOf(role.toUpperCase()).getUserRoleId();
+        int roleId = role.getUserRoleId();
 
         try {
             userDAO.updateUser(userToEdit.getUserId(), loyaltyPoints, active, roleId);
@@ -83,11 +123,19 @@ public class AdminLogic {
         userToEdit.setRole(roleId);
     }
 
-    //ok+
-    public void editDish(Dish dishToEdit, String description, String priceString, String inMenuString) throws LogicException {
-
-        BigDecimal price = new BigDecimal(priceString);
-        boolean inMenu = Boolean.valueOf(inMenuString);
+    /**
+     * Edits {@code Dish} object -
+     * updates database values - description, price and inMenu status
+     * for dish that should be edited.
+     * After the update, updated values are set to this {@code Dish} object
+     *
+     * @param dishToEdit  a {@code Dish} that should be edited
+     * @param description a new description value
+     * @param price       a new price value
+     * @param inMenu      a new inMenu value (in  menu - true, otherwise - false)
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
+    public void editDish(Dish dishToEdit, String description, BigDecimal price, boolean inMenu) throws LogicException {
 
         try {
             dishDAO.updateDish(dishToEdit.getDishId(), description, price, inMenu);
@@ -99,10 +147,22 @@ public class AdminLogic {
         dishToEdit.setInMenu(inMenu);
     }
 
-    //ok+
-    public Dish addDish(String type, String name, String description, String price, String inMenu) throws LogicException {
+    /**
+     * Creates {@code Dish} object and
+     * updates database with a new row that represents this object.
+     * If the update is successful, returns {@code Dish} object that is built from updated database
+     *
+     * @param type        a dish type
+     * @param name        a dish name
+     * @param description a dish description
+     * @param price       a dish price
+     * @param inMenu      a dish inMenu (in  menu - true, otherwise - false)
+     * @return a {@code Dish} object that is build from updated database
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
+    public Dish addDish(DishType type, String name, String description, BigDecimal price, boolean inMenu) throws LogicException {
 
-        Dish dish = new Dish(DishType.valueOf(type.toUpperCase()), name, description, new BigDecimal(price), Boolean.valueOf(inMenu));
+        Dish dish = new Dish(type, name, description, price, inMenu);
         try {
             dishDAO.create(dish);
             return dishDAO.findEntityById(dish.getDishId());
@@ -111,8 +171,14 @@ public class AdminLogic {
         }
     }
 
-    //ok+
-    public boolean HasCustomerActiveOrders(User userToEdit) throws LogicException {
+    /**
+     * Checks, if a user has at list one active order
+     *
+     * @param userToEdit a {@code User} that should be checked
+     * @return a {@code true} if the user has at list one active order, {@code false} otherwise
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
+    public boolean hasCustomerActiveOrders(User userToEdit) throws LogicException {
 
         try {
             return !orderDAO.findActiveOrdersByUserId(userToEdit.getUserId()).isEmpty();
@@ -121,7 +187,13 @@ public class AdminLogic {
         }
     }
 
-    //ok+
+    /**
+     * Updates a database with null values of order rating and review,
+     * sets this values to the {@code Order} object after the update
+     *
+     * @param order a {@code Order} object which rating and review should be removed (set to null)
+     * @throws LogicException if {@code DaoException} occurs (database access error)
+     */
     public void removeReview(Order order) throws LogicException {
 
         try {

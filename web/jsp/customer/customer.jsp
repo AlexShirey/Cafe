@@ -59,8 +59,14 @@
                     <td scope="row">${status.count}</td>
                     <td><ctg:formatDate date="${order.createDate}"/></td>
                     <td class="text-center">
-                        <a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_order_details&orderId=${order.orderId}&orderPrice=${order.orderPrice}"
-                           target="_blank"><fmt:message key="customerPage.orderDetails"/></a>
+                        <form target="_blank" method="post" action="${root}/controller">
+                            <input type="hidden" name="command" value="show_order_details"/>
+                            <input type="hidden" name="orderId" value="${order.orderId}"/>
+                            <input type="hidden" name="orderPrice" value="${order.orderPrice}"/>
+                            <button class="btn btn-outline-info my-2 my-sm-0" type="submit"><fmt:message key="customerPage.orderDetails"/></button>
+                        </form>
+                        <%--<a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_order_details&orderId=${order.orderId}&orderPrice=${order.orderPrice}"--%>
+                           <%--target="_blank"><fmt:message key="customerPage.orderDetails"/></a>--%>
                     </td>
                     <td>${order.orderPrice}</td>
                     <td><ctg:formatDate date="${order.pickUpTime}"/></td>
@@ -107,8 +113,14 @@
                     <td scope="row">${status.count}</td>
                     <td><ctg:formatDate date="${order.createDate}"/></td>
                     <td class="text-center">
-                        <a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_order_details&orderId=${order.orderId}&orderPrice=${order.orderPrice}"
-                           target="_blank"><fmt:message key="customerPage.orderDetails"/></a>
+                        <form target="_blank" method="post" action="${root}/controller">
+                            <input type="hidden" name="command" value="show_order_details"/>
+                            <input type="hidden" name="orderId" value="${order.orderId}"/>
+                            <input type="hidden" name="orderPrice" value="${order.orderPrice}"/>
+                            <button class="btn btn-outline-info my-2 my-sm-0" type="submit"><fmt:message key="customerPage.orderDetails"/></button>
+                        </form>
+                        <%--<a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_order_details&orderId=${order.orderId}&orderPrice=${order.orderPrice}"--%>
+                           <%--target="_blank"><fmt:message key="customerPage.orderDetails"/></a>--%>
                     </td>
                     <td>${order.orderPrice}</td>
                     <td>${order.paymentType}</td>
@@ -137,8 +149,14 @@
                     <td scope="row">${status.count}</td>
                     <td><ctg:formatDate date="${order.createDate}"/></td>
                     <td class="text-center">
-                        <a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_order_details&orderId=${order.orderId}&orderPrice=${order.orderPrice}"
-                           target="_blank"><fmt:message key="customerPage.orderDetails"/></a>
+                        <form target="_blank" method="post" action="${root}/controller">
+                            <input type="hidden" name="command" value="show_order_details"/>
+                            <input type="hidden" name="orderId" value="${order.orderId}"/>
+                            <input type="hidden" name="orderPrice" value="${order.orderPrice}"/>
+                            <button class="btn btn-outline-info my-2 my-sm-0" type="submit"><fmt:message key="customerPage.orderDetails"/></button>
+                        </form>
+                        <%--<a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_order_details&orderId=${order.orderId}&orderPrice=${order.orderPrice}"--%>
+                           <%--target="_blank"><fmt:message key="customerPage.orderDetails"/></a>--%>
                     </td>
                     <td>${order.orderPrice}</td>
                     <td>${order.paymentType}</td>

@@ -21,6 +21,14 @@ import com.shirey.cafe.logic.AdminLogic;
 import com.shirey.cafe.logic.DishLogic;
 import com.shirey.cafe.logic.OrderLogic;
 
+/**
+ * The {@code CommandType} class
+ * is enum of all commands.
+ * Each type has an {@code Command} object represented by this type.
+ *
+ * @author Alex Shirey
+ */
+
 public enum CommandType {
 
     //Common
@@ -42,10 +50,10 @@ public enum CommandType {
     ADD_DISH_TO_CART(new AddDishToCartCommand(new CustomerLogic())),
     REMOVE_DISH_FROM_CART(new RemoveDishFromCartCommand(new CustomerLogic())),
     SHOW_CART(new ShowCartCommand(new CustomerLogic())),
-    PLACE_ORDER(new PlaceOrderCommand(new CustomerLogic())),
+    SHOW_PLACE_ORDER_PAGE(new ShowPlaceOrderPageCommand(new CustomerLogic())),
     CONFIRM_ORDER(new ConfirmOrderCommand(new CustomerLogic(), new OrderLogic(), new DishLogic())),
     SHOW_CUSTOMER_PAGE(new ShowCustomerPageCommand(new OrderLogic())),
-    SHOW_LEAVE_FEEDBACK_PAGE(new ShowLeaveFeedbackPageCommmand()),
+    SHOW_LEAVE_FEEDBACK_PAGE(new ShowLeaveFeedbackPageCommand()),
     LEAVE_FEEDBACK(new LeaveFeedbackCommand(new OrderLogic())),
 
     //Admin
@@ -70,10 +78,18 @@ public enum CommandType {
 
     private Command command;
 
+    /**
+     * Sets {@code Command} to the current CommandType
+     */
     CommandType(Command command) {
         this.command = command;
     }
 
+    /**
+     * Returns {@code Command} represented by the current CommandType
+     *
+     * @return {@code Command} object
+     */
     public Command getCommand() {
         return command;
     }

@@ -10,6 +10,16 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The {@code OrderAutoCancelDaemon} class
+ * is a thread that cancels the order if it is not picked up (order status is active)
+ * when time to sleep (pick up time - current time + additional time) is gone.
+ * If user has 3 cancelled orders, this thread also bans this user.
+ *
+ * @author Alex Shirey
+ */
+
+
 public class OrderAutoCancelDaemon extends Thread {
 
     private static final Logger LOGGER = LogManager.getLogger(OrderAutoCancelDaemon.class);
@@ -26,6 +36,13 @@ public class OrderAutoCancelDaemon extends Thread {
         timeToSleepBeforeCancel = order.getPickUpTime().getTime() - System.currentTimeMillis() + getAdditionalTimeBeforeCancel();
     }
 
+    /**
+     * Current thread sleeps a defined time,
+     * if the order is still active, cancels the order and
+     * bans user if he has 3 cancelled orders.
+     *
+     * @throws RuntimeException in case of InterruptedException or LogicException
+     */
     @Override
     public void run() {
 
@@ -38,9 +55,7 @@ public class OrderAutoCancelDaemon extends Thread {
 
         try {
             if (orderLogic.isOrderActive(order)) {
-
                 orderLogic.cancelOrder(user, order);
-
                 if (orderLogic.getUserCancelledOrdersAmount(order.getUserId()) == 3) {
                     userLogic.banUser(user);
                 }
@@ -51,6 +66,18 @@ public class OrderAutoCancelDaemon extends Thread {
         }
     }
 
+
+    /**
+     * Defines additional time to sleep after pick up date comes.
+     * Additional time is a value in a properties file.
+     *
+     * @return a long time in millis
+     * @throws ClassCastException    if the object found for the given key is not a string
+     * @throws RuntimeException      if no resource bundle for the specified base name can be found or
+     *                               if no object for the given key can be found
+     * @throws NumberFormatException if the string does not contain a
+     *                               parsable {@code long}.
+     */
     public static long getAdditionalTimeBeforeCancel() {
 
         if (additionalTimeBeforeCancel == 0) {
