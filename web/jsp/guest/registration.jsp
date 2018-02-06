@@ -88,6 +88,8 @@
     </div>
 </div>
 
+<br>
+<br>
 
 <c:import url="/jsp/service/footer.jsp"/>
 <script type="text/javascript" src="${root}/js/cafe.js"></script>

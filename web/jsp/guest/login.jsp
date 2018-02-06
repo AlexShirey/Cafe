@@ -41,6 +41,8 @@
     </div>
 </div>
 
+<br>
+<br>
 
 <c:import url="/jsp/service/footer.jsp"/>
 </body>

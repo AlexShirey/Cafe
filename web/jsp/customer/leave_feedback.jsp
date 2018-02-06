@@ -65,5 +65,8 @@
 
 <c:remove var="messageFeedbackLeft"/>
 
+<br>
+<br>
+
 <c:import url="/jsp/service/footer.jsp"/>
 </body>
