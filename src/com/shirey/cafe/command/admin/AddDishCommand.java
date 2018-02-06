@@ -56,12 +56,12 @@ public class AddDishCommand implements Command {
         String price = request.getParameter(PARAM_DISH_PRICE);
         String inMenu = request.getParameter(PARAM_DISH_IN_MENU);
 
-        if (!InputDataValidator.validateAddDishForm(name, description, price)) {
+        if (!InputDataValidator.validateAddDishForm(name.trim(), description.trim(), price)) {
             request.setAttribute("messageInvalidInputData", true);
             return refreshForward(PageManager.getProperty(PAGE_DISHES));
         }
 
-        Dish dish = adminLogic.addDish(DishType.valueOf(type), name, description, new BigDecimal(price), Boolean.valueOf(inMenu));
+        Dish dish = adminLogic.addDish(DishType.valueOf(type.toUpperCase()), name, description, new BigDecimal(price), Boolean.valueOf(inMenu));
         List<Dish> dishes = (List<Dish>) request.getSession().getAttribute("dishes");
         dishes.add(dish);
 

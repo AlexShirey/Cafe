@@ -40,7 +40,7 @@ public class InputDataValidator {
     /**
      * The {@code String} value that is pattern for description.
      */
-    private static final String DISH_DESCRIPTION_PATTERN = "[A-ZА-ЯЁ].{5,200}";
+    private static final String DISH_DESCRIPTION_PATTERN = "[A-ZА-ЯЁ].{4,200}";
 
     /**
      * Don't let anyone instantiate this class.

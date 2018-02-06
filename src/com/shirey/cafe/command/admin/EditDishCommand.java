@@ -52,7 +52,7 @@ public class EditDishCommand implements Command {
         String price = request.getParameter(PARAM_PRICE);
         String inMenu = request.getParameter(PARAM_IN_MENU);
 
-        if (!InputDataValidator.validateEditDishForm(description, price)) {
+        if (!InputDataValidator.validateEditDishForm(description.trim(), price)) {
             request.setAttribute("messageInvalidInputData", true);
             return refreshForward(PageManager.getProperty(PAGE_EDIT_DISH));
         }
