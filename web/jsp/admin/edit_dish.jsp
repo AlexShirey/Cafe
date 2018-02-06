@@ -22,8 +22,8 @@
             </c:if>
             <c:if test="${messageUpdatedSuccessfully}">
     <span class="text-success">
-        <fmt:message key="message.updatedSuccessfully" bundle="${rbMsg}"/></span>
-                <br><a href="/controller?command=show_dishes"><fmt:message key="title.dishes"/></a>
+        <fmt:message key="message.updatedSuccessfully" bundle="${rbMsg}"/></span><br>
+                <br><a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_dishes"><fmt:message key="title.dishes"/></a>
                 <c:remove var="messageUpdatedSuccessfully"/>
             </c:if>
         </div>

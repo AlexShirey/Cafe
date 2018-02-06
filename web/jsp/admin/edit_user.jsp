@@ -29,12 +29,13 @@
             </c:if>
             <c:if test="${messageUpdatedSuccessfully}">
     <span class="text-success">
-    <fmt:message key="message.updatedSuccessfully" bundle="${rbMsg}"/></span>
-                <br><a href="/controller?command=show_users"><fmt:message key="title.users"/></a>
+    <fmt:message key="message.updatedSuccessfully" bundle="${rbMsg}"/></span><br>
+                <br><a class="btn btn-outline-info my-2 my-sm-0" href="${root}/controller?command=show_users"><fmt:message key="title.users"/></a>
                 <c:remove var="messageUpdatedSuccessfully"/>
             </c:if>
         </div>
     </div>
+    <br>
     <div class="row justify-content-md-center text-left">
         <div class="col-6">
             <form method="post" action="${root}/controller">
